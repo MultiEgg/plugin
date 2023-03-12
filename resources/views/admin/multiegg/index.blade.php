@@ -1,39 +1,10 @@
-<?php
+use app\Http\Controllers\MultiEggController;
 
-namespace Pterodactyl\Http\Controllers\Admin;
+<style>
+        .extraPadd { padding-left: 100px }
+        .no-resize { resize: none; }
+</style>
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cache;
-use DB;
-use DateTime;
-use Illuminate\View\View;
-use Pterodactyl\Models\MultiEgg;
-use Illuminate\View\Factory as ViewFactory;
-use Pterodactyl\Http\Controllers\Controller;
-use Pterodactyl\Services\Helpers\SoftwareVersionService;
-use Prologue\Alerts\AlertsMessageBag;
-
-
-class MultiEggController extends Controller
-{
-    /**
-     * MultiEggController constructor.
-     */
-    public function __construct(
-        private AlertsMessageBag $alert,
-        private SoftwareVersionService $version,
-        private ViewFactory $view
-    ) {
-    }
-
-    public function index() {
-        return $this->view->make('admin.multiegg.index',['version'=>$this->version]);
-    }
-
-}
-root@test-ptero:/var/www/pterodactyl# cat resources/views/admin/multiegg/index.blade.php 
 @extends('layouts.admin')
 
 @section('title')
@@ -50,40 +21,25 @@ root@test-ptero:/var/www/pterodactyl# cat resources/views/admin/multiegg/index.b
 
 @section('content')
 <div class="row">
-    <div class="col-xs-12">
-        <div class="box
-            @if($version->isLatestPanel())
-                box-success
-            @else
-                box-danger
-            @endif
-        ">
-            <div class="box-header with-border">
-                <h3 class="box-title">System Information</h3>
-            </div>
-            <div class="box-body">
-                @if ($version->isLatestPanel())
-                    You are running Pterodactyl Panel version <code>{{ config('app.version') }}</code>. Your panel is up-to-date!
-                @else
-                    Your panel is <strong>not up-to-date!</strong> The latest version is <a href="https://github.com/Pterodactyl/Panel/releases/v{{ $version->getPanel() }}" target="_blank"><code>{{ $version->getPanel() }}</code></a> and you are currently running version <code>{{ config('app.version') }}</code>.
-                @endif
-            </div>
+        <div class="col-sm-6">
+                <form action="/admin/multiegg/edit" method="POST">
+                <div class="box">
+                        <div class="box-header with-border">
+                                <h3 class="box-title">License</h3>
+                        </div>
+                        <div class="box-body">
+                                <div class="form-group">
+                                        {{ Form::label('key', 'License Key'); }}
+                                        {{ Form::text('key', '', array('class'=>'form-control no-resize')); }}
+                                </div>
+                                <div class="box-footer">
+                                        {!! csrf_field() !!}
+                                        <button class="btn btn-sm btn-primary pull-right" name="_method" value="POST" type="submit">Save</button>
+                                </div>
+                        </div>
+                </div>
+                </form>
         </div>
-    </div>
 </div>
-<div class="row">
-    <div class="col-xs-6 col-sm-3 text-center">
-        <a href="{{ $version->getDiscord() }}"><button class="btn btn-warning" style="width:100%;"><i class="fa fa-fw fa-support"></i> Get Help <small>(via Discord)</small></button></a>
-    </div>
-    <div class="col-xs-6 col-sm-3 text-center">
-        <a href="https://pterodactyl.io"><button class="btn btn-primary" style="width:100%;"><i class="fa fa-fw fa-link"></i> Documentation</button></a>
-    </div>
-    <div class="clearfix visible-xs-block">&nbsp;</div>
-    <div class="col-xs-6 col-sm-3 text-center">
-        <a href="https://github.com/pterodactyl/panel"><button class="btn btn-primary" style="width:100%;"><i class="fa fa-fw fa-support"></i> Github</button></a>
-    </div>
-    <div class="col-xs-6 col-sm-3 text-center">
-        <a href="{{ $version->getDonations() }}"><button class="btn btn-success" style="width:100%;"><i class="fa fa-fw fa-money"></i> Support the Project</button></a>
-    </div>
-</div>
+
 @endsection
