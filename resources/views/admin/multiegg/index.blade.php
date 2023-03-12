@@ -12,10 +12,10 @@ use app\Http\Controllers\MultiEggController;
 @endsection
 
 @section('content-header')
-    <h1>Administrative Overview<small>A quick glance at your system.</small></h1>
+    <h1>License Control<small>- MultiEgg</small></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('admin.index') }}">Admin</a></li>
-        <li class="active">Index</li>
+        <li class="active">MultiEgg License Control</li>
     </ol>
 @endsection
 
@@ -39,6 +39,21 @@ use app\Http\Controllers\MultiEggController;
                         </div>
                 </div>
                 </form>
+        </div>
+
+        <div class="col-sm-6">
+                <div class="box box-danger">
+                        <div class="box-header with-border">
+                                <h3 class="box-title">License Information</h3>
+                        </div>
+                        <div class="box-body">
+                                Active Plan: <strong>Filler Value</strong></br>
+                                Expiry Date: <strong>Filler Value</strong></br>
+                                Key Status:  <strong>Filler Value</strong></br>
+                                Issuee:      <strong>Filler Value</strong></br>
+                                Business:    <strong>Filler Value</strong></br>
+                        </div>
+                </div>
         </div>
 </div>
 
