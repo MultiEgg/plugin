@@ -30,19 +30,24 @@ class MultiEggController extends Controller
 
     public function index() {
         $key = DB::select("select * from `multiegg` where `id`='1'");
+        if(!Cache::has('multiegg_license_data_key') || !Cache::has('multiegg_license_data_brand') || !Cache::has('multiegg_license_data_perm') || !Cache::has('multiegg_license_data_toggle')) { $this->cacheLicenseDetails; }
         return $this->view->make('admin.multiegg.index',[
                 'version'=>$this->version,
                 'key'=>$key,
-                'is_valid'=>$this->checkKeyValid()
+                'is_valid'=>$this->checkKeyValid(),
+                'cache_key'=>Cache::get('multiegg_license_data_key'),
+                'cache_brand'=>Cache::get('multiegg_license_data_brand'),
+                'cache_perm'=>Cache::get('multiegg_license_data_perm'),
+                'cache_toggle'=>Cache::get('multiegg_license_data_toggle')
         ]);
     }
 
     public function updateKeys(MultiEgg $multiegg, Request $request) {
         MultiEgg::where('id',1)->update(['license'=>$request->key]);
-        if(Cache::has('multiegg_license_data')){ Cache::forget('multiegg_license_data'); }
-        if(Cache::has('multiegg_license_brand')){ Cache::forget('multiegg_license_brand'); }
-        if(Cache::has('multiegg_license_perm')){ Cache::forget('multiegg_license_perm'); }
-        if(Cache::has('multiegg_license_toggle')){ Cache::forget('multiegg_license_toggle'); }
+        if(Cache::has('multiegg_license_data_key')){ Cache::forget('multiegg_license_data_key'); }
+        if(Cache::has('multiegg_license_data_brand')){ Cache::forget('multiegg_license_data_brand'); }
+        if(Cache::has('multiegg_license_data_perm')){ Cache::forget('multiegg_license_data_perm'); }
+        if(Cache::has('multiegg_license_data_toggle')){ Cache::forget('multiegg_license_data_toggle'); }
         $this->cacheLicenseDetails();
         return redirect()->route('admin.multiegg.index');
     }
