@@ -30,7 +30,7 @@ use app\Http\Controllers\MultiEggController;
                         <div class="box-body">
                                 <div class="form-group">
                                         {{ Form::label('key', 'License Key'); }}
-                                        {{ Form::text('key', '', array('class'=>'form-control no-resize')); }}
+                                        {{ Form::text('key', $key[0]->license, array('class'=>'form-control no-resize')); }}
                                 </div>
                                 <div class="box-footer">
                                         {!! csrf_field() !!}
