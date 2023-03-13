@@ -30,7 +30,7 @@ class MultiEggController extends Controller
 
     public function index() {
         $key = DB::select("select * from `multiegg` where `id`='1'");
-        if(!Cache::has('multiegg_license_data_key') || !Cache::has('multiegg_license_data_brand') || !Cache::has('multiegg_license_data_perm') || !Cache::has('multiegg_license_data_toggle')) { $this->cacheLicenseDetails; }
+        if(!Cache::has('multiegg_license_data_key') || !Cache::has('multiegg_license_data_brand') || !Cache::has('multiegg_license_data_perm') || !Cache::has('multiegg_license_data_toggle')) { $this->cacheLicenseDetails(); }
         return $this->view->make('admin.multiegg.index',[
                 'version'=>$this->version,
                 'key'=>$key,
@@ -38,7 +38,8 @@ class MultiEggController extends Controller
                 'cache_key'=>Cache::get('multiegg_license_data_key'),
                 'cache_brand'=>Cache::get('multiegg_license_data_brand'),
                 'cache_perm'=>Cache::get('multiegg_license_data_perm'),
-                'cache_toggle'=>Cache::get('multiegg_license_data_toggle')
+                'cache_toggle'=>Cache::get('multiegg_license_data_toggle'),
+                'pretty_date'=>$this->prettyDate()
         ]);
     }
 
@@ -78,6 +79,18 @@ class MultiEggController extends Controller
             Cache::put('multiegg_license_data_perm', $perm_res, now()->addMinutes(60));
             Cache::put('multiegg_license_data_toggle', $toggle_res, now()->addMinutes(60));
         }
+    }
+
+    public function prettyDate() {
+        $now = new DateTime();
+        $future_date = new DateTime(Cache::get('multiegg_license_data_key')->data->expires, new \DateTimeZone('America/Denver'));
+
+        $difference = $future_date->diff($now);
+        $difference_pretty = $difference->format("(%a day(s), %h hour(s))");
+
+        $expiry = strtotime(Cache::get('multiegg_license_data_key')->data->expires);
+        $expiry_pretty = date('M d Y', $expiry);
+        return $expiry_pretty." ".$difference_pretty;
     }
 
 }
