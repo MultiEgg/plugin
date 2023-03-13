@@ -55,6 +55,7 @@ use app\Http\Controllers\MultiEggController;
                                 Business:    <strong>{{ $cache_key->data->business }}</strong></br>
                                 @else
                                 Key Status:  <strong>@if($is_valid == "error") Inactive @elseif($is_valid == "suspended") Key Suspended @else Active @endif</strong></br>
+                                @endif
                         </div>
                 </div>
         </div>
