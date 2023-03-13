@@ -47,11 +47,11 @@ use app\Http\Controllers\MultiEggController;
                                 <h3 class="box-title">License Information</h3>
                         </div>
                         <div class="box-body">
-                                Active Plan: <strong>Filler Value</strong></br>
-                                Expiry Date: <strong>Filler Value</strong></br>
-                                Key Status:  <strong>Filler Value</strong></br>
-                                Issuee:      <strong>Filler Value</strong></br>
-                                Business:    <strong>Filler Value</strong></br>
+                                Active Plan: <strong>{{ $cache_key->data->plan }}</strong></br>
+                                Expiry Date: <strong>{{ $pretty_date }}</strong></br>
+                                Key Status:  <strong>@if($is_valid == "error") Inactive @elseif($is_valid == "suspended") Key Suspended @else Active @endif</strong></br>
+                                Issuee:      <strong>{{ $cache_key->data->isuee }}</strong></br>
+                                Business:    <strong>{{ $cache_key->data->business }}</strong></br>
                         </div>
                 </div>
         </div>
